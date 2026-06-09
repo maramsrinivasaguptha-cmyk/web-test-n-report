@@ -1,0 +1,14 @@
+C:\Users\DELL\work\WebTestNReport\src\main\java\com\example\webtestnreport\controller\TestRuleController.java
+C:\Users\DELL\work\WebTestNReport\src\main\java\com\example\webtestnreport\controller\TestRunController.java
+C:\Users\DELL\work\WebTestNReport\src\main\java\com\example\webtestnreport\controller\TicketController.java
+C:\Users\DELL\work\WebTestNReport\src\main\java\com\example\webtestnreport\model\TestRule.java
+C:\Users\DELL\work\WebTestNReport\src\main\java\com\example\webtestnreport\model\TestRun.java
+C:\Users\DELL\work\WebTestNReport\src\main\java\com\example\webtestnreport\model\Ticket.java
+C:\Users\DELL\work\WebTestNReport\src\main\java\com\example\webtestnreport\repository\TestRuleRepository.java
+C:\Users\DELL\work\WebTestNReport\src\main\java\com\example\webtestnreport\repository\TestRunRepository.java
+C:\Users\DELL\work\WebTestNReport\src\main\java\com\example\webtestnreport\repository\TicketRepository.java
+C:\Users\DELL\work\WebTestNReport\src\main\java\com\example\webtestnreport\service\DataInitializer.java
+C:\Users\DELL\work\WebTestNReport\src\main\java\com\example\webtestnreport\service\PlaywrightTestRunner.java
+C:\Users\DELL\work\WebTestNReport\src\main\java\com\example\webtestnreport\service\RuleScheduler.java
+C:\Users\DELL\work\WebTestNReport\src\main\java\com\example\webtestnreport\service\TicketService.java
+C:\Users\DELL\work\WebTestNReport\src\main\java\com\example\webtestnreport\WebTestNReportApplication.java
