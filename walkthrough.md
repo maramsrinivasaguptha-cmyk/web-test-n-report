@@ -1,41 +1,34 @@
-# Walkthrough - Web UI Testing & Ticket Creator
+# Walkthrough - Advanced E2E Staging & API/DB Testing
 
-We have successfully built and verified a lightweight, high-performance Web UI QA Testing application called **WebTestNReport** inside a Spring Boot framework. It utilizes a custom "Scratchpad DSL" to describe actions, runs them using a headless Playwright Chromium instance, and automatically manages tickets on test failures.
+We have successfully implemented E2E testing pipelines, SQL database connectivity, a simulated NoSQL document store, variable chaining across execution steps, and a visual pipeline stages component inside **WebTestNReport**.
 
-## Features Built
+---
 
-1. **Scratchpad DSL Engine**:
-   - Parses simple line-by-line actions: `goto <url>`, `click <selector>`, `fill <selector> = <value>`, `type <selector> = <value>`, `press <key>`, `wait <ms>`, `check <selector>`, `uncheck <selector>`.
-   - Supports rich assertions: `assert-text <selector> = <expected>`, `assert-title = <expected>`, `assert-exists <selector>`, `assert-visible <selector>`.
-   - Runs headless Playwright. In the event of failure (assertion or page load crash), it stops instantly, captures a screenshot, compiles the log, and creates/updates an incident ticket.
+## E2E Pipeline Capabilities Added
 
-2. **Spring Boot Backend**:
-   - JPA entities (`TestRule`, `TestRun`, `Ticket`) stored in a persistent H2 database file (`./data/webtestdb`).
-   - `RuleScheduler`: A background worker that runs active tests periodically based on their custom minute interval.
-   - `TicketService`: Auto-creates high-priority tickets on rule failure, auto-resolves tickets on subsequent test success.
-   - REST Controllers exposing simple APIs.
+1. **Variables Context Store**: Support for resolving variable interpolation (e.g. `${orderId}`) dynamically at runtime. This allows extracting data from responses (`store-json`) or databases (`store-db`) and passing it downstream.
+2. **Local Database Connection Pool Sharing**: Configured `db-connect` (without arguments) to automatically borrow a connection from the main Spring Boot Hikari connection pool, resolving H2 database file locking issues.
+3. **Simulated NoSQL Document Store**: Created a lightweight JSON file-based database service inside the `./data/nosql` folder, supporting `nosql-insert`, `nosql-find`, `assert-nosql`, and `store-nosql` commands.
+4. **Visual Stages Visualizer**: Added stepper stages rendering inside the run detail modal. If a stage is clicked, the console logs automatically scroll directly to the beginning of that stage's logs.
+5. **Seeded E2E Demonstrations**: Seeded two detailed multi-stage rules in H2 database showing off E2E flows (API/SQL validation and NoSQL to API to SQL flow).
 
-3. **Interactive Frontend SPA**:
-   - Dark Slate Glassmorphic theme using Google Fonts Outfit and Inter.
-   - **Dashboard**: Live success rate pie chart, metrics, and list of active incidents.
-   - **Test Rules Builder**: Interactive rule card list. Users can add, update, delete, or trigger runs.
-   - **Scratchpad Code Editor**: Text editor with line numbering and a click-to-insert snippet dropdown (making it easy to build actions).
-   - **Live Terminal Log**: Manual test triggers stream logs to an overlay console box.
-   - **Tickets Kanban Board**: Visual Columns (Open, In Progress, Resolved) with one-click status transitions.
-   - **Execution Details Viewer**: Displays historical logs and side-by-side failure screenshots.
-   - **Guide & About Tab**: Full in-UI reference manual explaining all Scratchpad commands (goto, click, fill, type, wait, assert-text, etc.) with coding examples.
+---
 
-## Dropdown & Styling Bugfix
-We resolved a CSS clipping bug where the bottom choices of the **Insert Snippet** dropdown (e.g. `assert-visible`, `wait 2000`) were cut off due to `overflow: hidden` on the `.scratchpad-section` container. We updated the container's overflow to `visible`, increased the dropdown's `z-index` to 50, and explicitly added border-radius matching to inner header and footer elements.
+## Verification Results
 
-## Verification Details
+We successfully executed E2E pipeline validations in the browser and verified all stages completed with status `SUCCESS`. Below are the screenshots and recording of the verification session.
 
-We successfully executed two automated browser subagent passes to verify the application:
-1. **Pass 1**: Navigated to dashboard, triggered a manual rule run (demonstrating browser download logs, screenshot capture, H2 persistence, and open ticket creation on the Kanban board).
-2. **Pass 2**: Opened the "Create New Rule" modal, clicked the "Insert Snippet" dropdown, and verified that all commands (including the last options) float properly over the editor and are fully visible. Switched to the new **Guide & About** tab and verified that all documentation sections load correctly.
+### 1. NoSQL to API to SQL E2E Pipeline
+Matches exact stages: **Populate NoSQL Database** $\rightarrow$ **Call API Integration** $\rightarrow$ **SQL Verification** $\rightarrow$ **NoSQL Cleanup**.
 
-### Browser Verification Recording
-Here is the recorded session showing the updated UI, snippet dropdown visibility, and Guide tab layout:
+![NoSQL to API to SQL Verification screenshot](docs/images/nosql_pipeline_log.png)
 
-![Verification Flow](C:/Users/DELL/.gemini/antigravity-ide/brain/546b8dbc-3aa9-43f8-ad89-94a4d5a26cf6/verify_guide_n_dropdown_1781030873353.webp)
+### 2. API & Local DB Validation E2E Pipeline
+Matches exact stages: **Get Active Rules** $\rightarrow$ **Query SQL Database**.
 
+![API & Local SQL DB Validation screenshot](docs/images/api_sql_pipeline_log.png)
+
+### 3. Full Execution Video Recording
+Here is the animation recording of the verification session running both E2E pipelines:
+
+![Verification session video](docs/images/e2e_verification_recording.webp)

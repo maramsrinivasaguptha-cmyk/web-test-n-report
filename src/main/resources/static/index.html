@@ -296,6 +296,78 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- NEW: E2E Pipeline and Advanced Testing Guide section -->
+                <div class="card guide-card" style="margin-top: 24px;">
+                    <div class="guide-header">
+                        <h3><i class="fa-solid fa-route"></i> E2E Pipelines &amp; Advanced Testing</h3>
+                        <p>WebTestNReport supports fully chained end-to-end testing. You can define test stages, make API calls, query SQL databases, interface with simulated NoSQL stores, and pass variables between them.</p>
+                    </div>
+                    
+                    <div class="guide-grid">
+                        <div class="guide-column">
+                            <h4><i class="fa-solid fa-network-wired"></i> API Testing &amp; Variable Store</h4>
+                            <div class="command-group">
+                                <div class="command-item">
+                                    <code>stage &lt;Stage Name&gt;</code>
+                                    <p>Declares a new visual stage in the test pipeline. Chained runs are structured by stage.</p>
+                                    <pre class="example-code">stage API Authentication</pre>
+                                </div>
+                                <div class="command-item">
+                                    <code>http-get / http-post / http-put / http-delete</code>
+                                    <p>Sends HTTP requests. Relative URLs beginning with <code>/</code> auto-complete to local server.</p>
+                                    <pre class="example-code">http-post /api/orders = {"qty": 5}</pre>
+                                </div>
+                                <div class="command-item">
+                                    <code>assert-status = &lt;Code&gt;</code>
+                                    <p>Asserts the HTTP status code of the last API response.</p>
+                                    <pre class="example-code">assert-status = 200</pre>
+                                </div>
+                                <div class="command-item">
+                                    <code>assert-json &lt;Path&gt; = &lt;Value&gt;</code>
+                                    <p>Asserts field value in last JSON response. Supports dot-notation.</p>
+                                    <pre class="example-code">assert-json user.id = 12</pre>
+                                </div>
+                                <div class="command-item">
+                                    <code>store-json &lt;Path&gt; = &lt;VarName&gt;</code>
+                                    <p>Extracts a JSON response field and stores it in variables context for subsequent steps.</p>
+                                    <pre class="example-code">store-json token = authToken</pre>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="guide-column">
+                            <h4><i class="fa-solid fa-database"></i> SQL &amp; Simulated NoSQL Databases</h4>
+                            <div class="command-group">
+                                <div class="command-item">
+                                    <code>db-connect [JDBC] [= User | Pass]</code>
+                                    <p>Connects to a database. Calling <code>db-connect</code> without arguments connects to local H2 database.</p>
+                                    <pre class="example-code">db-connect</pre>
+                                </div>
+                                <div class="command-item">
+                                    <code>db-query &lt;SQL&gt; / db-execute &lt;SQL&gt;</code>
+                                    <p>Runs SQL query or DDL/DML update statements.</p>
+                                    <pre class="example-code">db-query SELECT name FROM test_rules</pre>
+                                </div>
+                                <div class="command-item">
+                                    <code>assert-db &lt;ColName&gt; = &lt;Value&gt;</code>
+                                    <p>Asserts value in first row of last query result.</p>
+                                    <pre class="example-code">assert-db name = Check Example Domain</pre>
+                                </div>
+                                <div class="command-item">
+                                    <code>nosql-insert &lt;Collection&gt; = &lt;JSON&gt;</code>
+                                    <p>Inserts a document into simulated NoSQL document store (saved as JSON file locally).</p>
+                                    <pre class="example-code">nosql-insert carts = {"itemId": "item1"}</pre>
+                                </div>
+                                <div class="command-item">
+                                    <code>nosql-find &lt;Collection&gt; = &lt;Query&gt;</code>
+                                    <p>Queries documents matching filter object. Stores results in NoSQL context.</p>
+                                    <pre class="example-code">nosql-find carts = {"status": "pending"}</pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </section>
         </main>
     </div>
@@ -348,6 +420,18 @@
                                 <a href="#" data-snippet="assert-exists ">assert-exists &lt;Selector&gt;</a>
                                 <a href="#" data-snippet="assert-visible ">assert-visible &lt;Selector&gt;</a>
                                 <a href="#" data-snippet="wait 2000">wait 2000 (ms)</a>
+                                <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.08); margin: 4px 0;">
+                                <a href="#" data-snippet="stage ">stage &lt;Stage Name&gt;</a>
+                                <a href="#" data-snippet="http-get ">http-get &lt;URL&gt;</a>
+                                <a href="#" data-snippet="http-post  = ">http-post &lt;URL&gt; = &lt;Body&gt;</a>
+                                <a href="#" data-snippet="assert-status = ">assert-status = &lt;Status&gt;</a>
+                                <a href="#" data-snippet="assert-json  = ">assert-json &lt;Path&gt; = &lt;Val&gt;</a>
+                                <a href="#" data-snippet="store-json  = ">store-json &lt;Path&gt; = &lt;Var&gt;</a>
+                                <a href="#" data-snippet="db-connect">db-connect [JDBC]</a>
+                                <a href="#" data-snippet="db-query ">db-query &lt;SQL&gt;</a>
+                                <a href="#" data-snippet="assert-db  = ">assert-db &lt;Col&gt; = &lt;Val&gt;</a>
+                                <a href="#" data-snippet="nosql-insert  = ">nosql-insert &lt;Coll&gt; = &lt;JSON&gt;</a>
+                                <a href="#" data-snippet="nosql-find  = ">nosql-find &lt;Coll&gt; = &lt;Query&gt;</a>
                             </div>
                         </div>
                     </div>
@@ -381,6 +465,9 @@
                     <div class="meta-item"><strong>Duration:</strong> <span id="run-detail-duration">0 ms</span></div>
                     <div class="meta-item"><strong>Time:</strong> <span id="run-detail-time">June 8, 2026</span></div>
                 </div>
+                <!-- Pipeline Visualizer Stepper -->
+                <div class="pipeline-container hidden" id="run-pipeline-container"></div>
+                
                 <div class="run-layout">
                     <div class="run-log-col">
                         <h4>Execution Console Log</h4>

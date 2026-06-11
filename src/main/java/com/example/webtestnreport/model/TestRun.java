@@ -67,4 +67,11 @@ public class TestRun {
 
     public String getScreenshotPath() { return screenshotPath; }
     public void setScreenshotPath(String screenshotPath) { this.screenshotPath = screenshotPath; }
+
+    @Lob
+    @Column(columnDefinition = "CLOB")
+    private String stagesJson;
+
+    public String getStagesJson() { return stagesJson; }
+    public void setStagesJson(String stagesJson) { this.stagesJson = stagesJson; }
 }

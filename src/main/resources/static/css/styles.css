@@ -1156,3 +1156,125 @@ input:checked + .switch-slider:before {
     color: var(--text-primary);
 }
 
+/* Pipeline visualizer styling */
+.pipeline-container {
+    background: rgba(15, 23, 42, 0.4);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 20px;
+    margin-bottom: 24px;
+}
+
+.pipeline-stepper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    width: 100%;
+    gap: 12px;
+}
+
+.pipeline-step {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.pipeline-step:hover {
+    transform: translateY(-2px);
+}
+
+.pipeline-node {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    z-index: 2;
+    transition: var(--transition);
+    border: 2px solid transparent;
+}
+
+.pipeline-label {
+    font-family: var(--font-heading);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    max-width: 120px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: var(--transition);
+}
+
+.pipeline-step:hover .pipeline-label {
+    color: var(--text-primary);
+}
+
+/* Connectors */
+.pipeline-connector {
+    flex-grow: 1;
+    height: 2px;
+    background-color: var(--border-color);
+    margin-bottom: 24px; /* Align with nodes vertically */
+    z-index: 1;
+    position: relative;
+}
+
+.pipeline-connector.active {
+    background: linear-gradient(90deg, var(--success), var(--border-color));
+}
+
+/* Status variants */
+.pipeline-node.pending {
+    background-color: var(--secondary);
+    color: var(--text-muted);
+    border-color: var(--border-color);
+}
+
+.pipeline-node.running {
+    background-color: var(--warning-bg);
+    color: var(--warning);
+    border-color: var(--warning);
+    box-shadow: 0 0 10px rgba(245, 158, 11, 0.4);
+    animation: step-pulse 1.5s infinite alternate;
+}
+
+.pipeline-node.success {
+    background-color: var(--success-bg);
+    color: var(--success);
+    border-color: var(--success);
+}
+
+.pipeline-node.failed {
+    background-color: var(--danger-bg);
+    color: var(--danger);
+    border-color: var(--danger);
+    box-shadow: 0 0 10px rgba(239, 68, 68, 0.4);
+}
+
+.pipeline-node.skipped {
+    background-color: rgba(30, 41, 59, 0.3);
+    color: var(--text-muted);
+    border-color: transparent;
+    opacity: 0.5;
+}
+
+@keyframes step-pulse {
+    from {
+        box-shadow: 0 0 4px rgba(245, 158, 11, 0.2);
+    }
+    to {
+        box-shadow: 0 0 12px rgba(245, 158, 11, 0.6);
+    }
+}
+

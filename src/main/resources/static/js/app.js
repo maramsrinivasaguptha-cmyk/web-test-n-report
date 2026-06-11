@@ -607,7 +607,78 @@ function viewRunDetails(runId) {
         screenshotContainer.classList.add('hidden');
     }
 
+    // Render E2E stages pipeline if available
+    try {
+        if (run.stagesJson) {
+            const stages = JSON.parse(run.stagesJson);
+            drawPipeline(stages);
+        } else {
+            document.getElementById('run-pipeline-container').classList.add('hidden');
+        }
+    } catch (e) {
+        console.error('Error rendering stages JSON:', e);
+        document.getElementById('run-pipeline-container').classList.add('hidden');
+    }
+
     document.getElementById('run-modal').classList.add('active');
+}
+
+function drawPipeline(stages) {
+    const container = document.getElementById('run-pipeline-container');
+    if (!stages || !Array.isArray(stages) || stages.length === 0) {
+        container.classList.add('hidden');
+        return;
+    }
+    
+    container.classList.remove('hidden');
+    
+    let html = '<div class="pipeline-stepper">';
+    
+    stages.forEach((stage, idx) => {
+        let iconClass = 'fa-regular fa-circle';
+        if (stage.status === 'SUCCESS') iconClass = 'fa-solid fa-circle-check';
+        else if (stage.status === 'FAILED') iconClass = 'fa-solid fa-circle-xmark';
+        else if (stage.status === 'RUNNING') iconClass = 'fa-solid fa-circle-notch fa-spin';
+        else if (stage.status === 'SKIPPED') iconClass = 'fa-solid fa-ban';
+        
+        html += `
+            <div class="pipeline-step" onclick="scrollToStage('${escapeJsString(stage.name)}')" title="Click to view logs for this stage">
+                <div class="pipeline-node ${stage.status.toLowerCase()}">
+                    <i class="${iconClass}"></i>
+                </div>
+                <div class="pipeline-label">${escapeHtml(stage.name)}</div>
+                ${stage.durationMs > 0 ? `<div style="font-size: 9px; color: var(--text-muted); margin-top: 2px;">${stage.durationMs} ms</div>` : ''}
+            </div>
+        `;
+        
+        if (idx < stages.length - 1) {
+            let connActive = (stage.status === 'SUCCESS');
+            html += `<div class="pipeline-connector ${connActive ? 'active' : ''}"></div>`;
+        }
+    });
+    
+    html += '</div>';
+    container.innerHTML = html;
+}
+
+function scrollToStage(stageName) {
+    const logEl = document.getElementById('run-detail-log');
+    if (!logEl) return;
+    
+    const text = logEl.textContent;
+    const searchStr = `=== Stage: ${stageName} ===`;
+    const index = text.indexOf(searchStr);
+    
+    if (index !== -1) {
+        const lines = text.substring(0, index).split('\n');
+        const lineNum = lines.length;
+        const lineHeight = 18; // approx px per line in terminal pre block
+        logEl.scrollTop = (lineNum - 1) * lineHeight;
+    }
+}
+
+function escapeJsString(str) {
+    return str.replace(/'/g, "\\'").replace(/"/g, '\\"');
 }
 
 // Helper: close modal by id

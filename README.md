@@ -7,11 +7,15 @@
 ## 🌟 Key Features
 
 1. **Scratchpad DSL Engine**: Write clear, line-by-line browser automation scripts (e.g., `goto`, `click`, `fill`, `assert-text`).
-2. **Headless Browser Execution**: Runs Playwright Chromium context under the hood for maximum execution speed and reliability.
-3. **Automated Ticket Lifecycle**: Creates high-priority tickets automatically on test failure, updates tickets if failure persists, and auto-resolves tickets when subsequent runs pass.
-4. **Persistent Datastore**: Stores rules, runs, and incident tickets in a file-based H2 database (`./data/webtestdb`).
-5. **Interactive Glassmorphic SPA**: Modern dark slate dashboard featuring live metrics, a visual Kanban ticket board, a script editor with insertion helpers, and a live log runner.
-6. **Background Scheduling**: Runs tests periodically at user-defined minute intervals.
+2. **Chained E2E Staging Pipelines**: Structure test scenarios into visual stage pipelines using `stage <Name>` commands.
+3. **HTTP API Testing**: Execute REST client calls (`http-get`, `http-post`, etc.) and assert statuses or extract values from JSON responses.
+4. **Unified Database Verification**: Query the H2 SQL database or connect to any JDBC url, assert row counts/values, and query simulated local NoSQL document collections.
+5. **Session Variables Context**: Store extracted data into variables (`${varName}`) and pass them dynamically across pipeline steps.
+6. **Headless Browser Execution**: Runs Playwright Chromium context under the hood for maximum execution speed and reliability.
+7. **Automated Ticket Lifecycle**: Creates high-priority tickets automatically on test failure, updates tickets if failure persists, and auto-resolves tickets when subsequent runs pass.
+8. **Persistent Datastore**: Stores rules, runs, and incident tickets in a file-based H2 database (`./data/webtestdb`).
+9. **Interactive Glassmorphic SPA**: Modern dark slate dashboard featuring live metrics, a visual Kanban ticket board, a script editor with insertion helpers, a visual stages pipeline stepper, and a live log runner.
+10. **Background Scheduling**: Runs tests periodically at user-defined minute intervals.
 
 ---
 
